@@ -1,0 +1,23 @@
+name: SolarSystem
+options:
+  bundleIdPrefix: com.solarsystem
+  deploymentTarget:
+    visionOS: "1.0"
+
+targets:
+  SolarSystem:
+    type: application
+    platform: visionOS
+    sources: Sources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.solarsystem.app
+        SWIFT_VERSION: "5.9"
+    info:
+      path: Sources/Info.plist
+      properties:
+        CFBundleName: "Solar System"
+        CFBundleDisplayName: "Solar System"
+        CFBundleVersion: "1"
+        CFBundleShortVersionString: "1.0"
+        UIRequiredDeviceCapabilities: ["arm64", "metal"]

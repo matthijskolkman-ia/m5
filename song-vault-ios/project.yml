@@ -1,0 +1,37 @@
+name: SongVault
+options:
+  bundleIdPrefix: com.songvault
+  deploymentTarget:
+    iOS: "16.0"
+  xcodeVersion: "16.0"
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    TARGETED_DEVICE_FAMILY: "1"
+
+targets:
+  SongVault:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources
+    settings:
+      base:
+        INFOPLIST_FILE: Sources/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.songvault.app
+        DEVELOPMENT_TEAM: ""  # ← Add your team ID here for signing
+        CODE_SIGN_STYLE: Automatic
+        GENERATE_INFOPLIST_FILE: "YES"
+    info:
+      path: Sources/Info.plist
+      properties:
+        CFBundleName: "Song Vault"
+        CFBundleDisplayName: "Song Vault"
+        CFBundleVersion: "1"
+        CFBundleShortVersionString: "1.0"
+        UILaunchScreen: {}
+        UIRequiredDeviceCapabilities: ["arm64"]
+        UISupportedInterfaceOrientations: ["UIInterfaceOrientationPortrait"]
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true  # ← Allows HTTP to your Mac

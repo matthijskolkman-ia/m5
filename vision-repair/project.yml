@@ -1,0 +1,24 @@
+name: VisionRepair
+options:
+  bundleIdPrefix: com.visionrepair
+  deploymentTarget:
+    macOS: "14.0"
+
+targets:
+  VisionRepair:
+    type: application
+    platform: macOS
+    sources: Sources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.visionrepair.app
+        SWIFT_VERSION: "5.9"
+    info:
+      path: Sources/Info.plist
+      properties:
+        CFBundleName: Vision Repair
+        CFBundleDisplayName: Vision Repair
+        CFBundleVersion: "1"
+        CFBundleShortVersionString: "1.0"
+        NSHighResolutionCapable: true
+        LSMinimumSystemVersion: "14.0"

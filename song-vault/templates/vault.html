@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Song Vault — {{ catalog.catalog_name }}</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --card: #181825;
+    --border: #252538;
+    --text: #c8ccd4;
+    --muted: #6b6e7b;
+    --accent: #a78bfa;
+    --accent-glow: #7c3aed;
+    --gold: #f59e0b;
+    --red: #ef4444;
+    --green: #22c55e;
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(124,58,237,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(245,158,11,0.05) 0%, transparent 60%);
+  }
+
+  /* ── Header ─────────────────────────── */
+  .header {
+    text-align: center;
+    padding: 48px 24px 32px;
+    position: relative;
+  }
+  .header .icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 0 20px rgba(167,139,250,0.3));
+  }
+  .header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #f0f0f5;
+    letter-spacing: -0.02em;
+  }
+  .header .subtitle {
+    color: var(--muted);
+    margin-top: 6px;
+    font-size: 0.95rem;
+  }
+  .header .owner-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  /* ── Auth Banner ────────────────────── */
+  .auth-banner {
+    max-width: 520px;
+    margin: 0 auto 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    text-align: center;
+  }
+  .auth-banner.locked { border-color: var(--accent-glow); }
+  .auth-banner.unlocked { border-color: var(--green); }
+
+  .auth-banner .banner-icon { font-size: 2.5rem; margin-bottom: 10px; }
+  .auth-banner h2 { font-size: 1.2rem; color: #e0e0e8; margin-bottom: 6px; }
+  .auth-banner p { color: var(--muted); font-size: 0.85rem; margin-bottom: 16px; }
+
+  .code-input-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .code-input {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    color: var(--text);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 1rem;
+    text-align: center;
+    letter-spacing: 0.15em;
+    width: 220px;
+    outline: none;
+    transition: border-color 0.2s;
+    text-transform: uppercase;
+  }
+  .code-input:focus { border-color: var(--accent); }
+  .code-input::placeholder { color: #3a3a4a; letter-spacing: 0; font-family: inherit; }
+
+  .btn {
+    padding: 10px 22px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-primary:hover { background: var(--accent-glow); box-shadow: 0 0 20px rgba(124,58,237,0.4); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+
+  .remaining-badge {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 0.78rem;
+    color: var(--gold);
+    background: rgba(245,158,11,0.1);
+    border-radius: 12px;
+    padding: 3px 10px;
+  }
+  .remaining-badge.exhausted { color: var(--red); background: rgba(239,68,68,0.1); }
+
+  .msg {
+    margin-top: 10px;
+    font-size: 0.82rem;
+    min-height: 20px;
+    transition: color 0.3s;
+  }
+  .msg.error { color: var(--red); }
+  .msg.success { color: var(--green); }
+
+  /* ── Track Grid ─────────────────────── */
+  .container { max-width: 860px; margin: 0 auto; padding: 0 24px 64px; }
+  .track-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 12px;
+  }
+  @media (max-width: 440px) {
+    .track-grid { grid-template-columns: 1fr; }
+  }
+
+  .track-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: border-color 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .track-card.unlocked:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  .track-num {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--muted);
+    min-width: 28px;
+    text-align: right;
+  }
+  .track-card.unlocked .track-num { color: var(--accent); }
+
+  .track-info { flex: 1; min-width: 0; }
+  .track-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #e4e4ee;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .track-artist { font-size: 0.82rem; color: var(--muted); margin-top: 2px; }
+  .track-meta {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+  .track-meta span {
+    font-size: 0.7rem;
+    color: var(--muted);
+    background: rgba(255,255,255,0.03);
+    border-radius: 4px;
+    padding: 2px 7px;
+  }
+
+  .track-duration {
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+  }
+
+  /* ── Lock Overlay ───────────────────── */
+  .lock-icon {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+    opacity: 0.5;
+  }
+
+  .locked .track-title,
+  .locked .track-artist,
+  .locked .track-meta span {
+    filter: blur(6px);
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .locked-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(10,10,15,0.7);
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: var(--radius);
+  }
+  .locked .locked-overlay {
+    display: flex;
+  }
+  .locked-overlay span {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  /* ── Footer ─────────────────────────── */
+  .footer {
+    text-align: center;
+    padding: 32px;
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="icon">{% if unlocked %}🔓{% else %}🔒{% endif %}</div>
+  <h1>{{ catalog.catalog_name }}</h1>
+  <p class="subtitle">{{ catalog.total_tracks }} tracks · Electronic / Synth</p>
+  <div class="owner-badge">
+    © {{ catalog.owner }}
+    {% if unlocked %}
+      <span style="color:var(--green);"> ✓ Authorized</span>
+    {% endif %}
+  </div>
+</header>
+
+<!-- Auth Banner -->
+<div class="auth-banner {{ 'unlocked' if unlocked else 'locked' }}" id="authBanner">
+  {% if unlocked %}
+    <div class="banner-icon">✅</div>
+    <h2>Catalog Unlocked</h2>
+    <p>All tracks are now visible. Enjoy the music.</p>
+    <div class="remaining-badge" id="remainingBadge">
+      <span id="remCount">{{ catalog.max_authorizations - catalog.authorizations_used }}</span>
+      / {{ catalog.max_authorizations }} authorizations remaining
+    </div>
+  {% else %}
+    <div class="banner-icon">🔐</div>
+    <h2>Authorization Required</h2>
+    <p>Enter a valid code to unlock this catalog.</p>
+    <div class="code-input-row">
+      <input
+        type="text"
+        class="code-input"
+        id="codeInput"
+        placeholder="XXXX-XXXX-XXXX"
+        maxlength="14"
+        autocomplete="off"
+        spellcheck="false"
+      >
+      <button class="btn btn-primary" id="unlockBtn" onclick="unlock()">Unlock</button>
+    </div>
+    <div class="msg" id="msg"></div>
+    <div class="remaining-badge" id="remainingBadge">
+      <span id="remCount">{{ catalog.max_authorizations - catalog.authorizations_used }}</span>
+      / {{ catalog.max_authorizations }} authorizations remaining
+    </div>
+  {% endif %}
+</div>
+
+<!-- Track Grid -->
+<div class="container">
+  <div class="track-grid">
+    {% for track in catalog.tracks %}
+    <div class="track-card {{ 'unlocked' if unlocked else 'locked' }}">
+      <div class="track-num">{{ '%02d' % track.id }}</div>
+      <div class="track-info">
+        <div class="track-title">{{ track.title }}</div>
+        <div class="track-artist">{{ track.artist }}</div>
+        <div class="track-meta">
+          <span>{{ track.genre }}</span>
+          <span>{{ track.year }}</span>
+          <span>{{ track.bpm }} BPM</span>
+          <span>{{ track.key }}</span>
+        </div>
+      </div>
+      {% if unlocked %}
+        <div class="track-duration">{{ track.duration }}</div>
+      {% else %}
+        <div class="lock-icon">🔒</div>
+        <div class="locked-overlay"><span>🔒</span></div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<footer class="footer">
+  Song Vault · {{ catalog.max_authorizations - catalog.authorizations_used }} of {{ catalog.max_authorizations }} licenses available
+</footer>
+
+<script>
+  // Auto-format code input: insert dashes
+  const input = document.getElementById('codeInput');
+  if (input) {
+    input.addEventListener('input', function(e) {
+      let val = this.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+      if (val.length > 12) val = val.slice(0, 12);
+      if (val.length > 8) {
+        val = val.slice(0, 4) + '-' + val.slice(4, 8) + '-' + val.slice(8);
+      } else if (val.length > 4) {
+        val = val.slice(0, 4) + '-' + val.slice(4);
+      }
+      this.value = val;
+    });
+
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') unlock();
+    });
+  }
+
+  async function unlock() {
+    const btn = document.getElementById('unlockBtn');
+    const msg = document.getElementById('msg');
+    const code = (document.getElementById('codeInput')?.value || '').trim();
+
+    if (!code || code.length < 12) {
+      msg.textContent = 'Please enter a valid code (e.g. VLTC-XXXX-XXXX)';
+      msg.className = 'msg error';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Checking...';
+    msg.textContent = '';
+    msg.className = 'msg';
+
+    try {
+      const res = await fetch('/api/unlock', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        msg.textContent = data.message;
+        msg.className = 'msg success';
+        // Reload to show unlocked UI
+        setTimeout(() => location.reload(), 800);
+      } else {
+        msg.textContent = data.message;
+        msg.className = 'msg error';
+        btn.disabled = false;
+        btn.textContent = 'Unlock';
+        // Update remaining count
+        document.getElementById('remCount').textContent = data.remaining;
+        if (data.remaining === 0) {
+          document.getElementById('remainingBadge').classList.add('exhausted');
+        }
+      }
+    } catch (err) {
+      msg.textContent = 'Connection error. Is the server running?';
+      msg.className = 'msg error';
+      btn.disabled = false;
+      btn.textContent = 'Unlock';
+    }
+  }
+</script>
+
+</body>
+</html>

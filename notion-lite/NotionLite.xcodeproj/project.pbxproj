@@ -1,0 +1,345 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C10101010101010101010101 /* NotionLiteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20101010101010101010101 /* NotionLiteApp.swift */; };
+		C10101010101010101010102 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20101010101010101010102 /* ContentView.swift */; };
+		C10101010101010101010103 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20101010101010101010103 /* Page.swift */; };
+		C10101010101010101010104 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20101010101010101010104 /* Database.swift */; };
+		C10101010101010101010105 /* PageListSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20101010101010101010105 /* PageListSidebar.swift */; };
+		C10101010101010101010106 /* PageEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20101010101010101010106 /* PageEditorView.swift */; };
+		C10101010101010101010107 /* PageDetailPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20101010101010101010107 /* PageDetailPanel.swift */; };
+		C1010101011010101010108 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1010101011010101010109 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		C20101010101010101010101 /* NotionLiteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotionLiteApp.swift; sourceTree = "<group>"; };
+		C20101010101010101010102 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		C20101010101010101010103 /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
+		C20101010101010101010104 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
+		C20101010101010101010105 /* PageListSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageListSidebar.swift; sourceTree = "<group>"; };
+		C20101010101010101010106 /* PageEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageEditorView.swift; sourceTree = "<group>"; };
+		C20101010101010101010107 /* PageDetailPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageDetailPanel.swift; sourceTree = "<group>"; };
+		C20101010101010101010108 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C20101010101010101010109 /* NotionLite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NotionLite.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C1010101011010101010109 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		C30101010101010101010101 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				C20101010101010101010108 /* Info.plist */,
+				C1010101011010101010109 /* Assets.xcassets */,
+				C20101010101010101010101 /* NotionLiteApp.swift */,
+				C30101010101010101010102 /* Models */,
+				C30101010101010101010103 /* Services */,
+				C30101010101010101010104 /* Views */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		C30101010101010101010102 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C20101010101010101010103 /* Page.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		C30101010101010101010103 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				C20101010101010101010104 /* Database.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		C30101010101010101010104 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C20101010101010101010102 /* ContentView.swift */,
+				C20101010101010101010105 /* PageListSidebar.swift */,
+				C20101010101010101010106 /* PageEditorView.swift */,
+				C20101010101010101010107 /* PageDetailPanel.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		C30101010101010101010105 = {
+			isa = PBXGroup;
+			children = (
+				C30101010101010101010101 /* Sources */,
+				C30101010101010101010106 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C30101010101010101010106 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C20101010101010101010109 /* NotionLite.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C40101010101010101010101 /* NotionLite */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C50101010101010101010101 /* Build configuration list for PBXNativeTarget "NotionLite" */;
+			buildPhases = (
+				C1010101011010101010110 /* Resources */,
+				C60101010101010101010101 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NotionLite;
+			packageProductDependencies = (
+			);
+			productName = NotionLite;
+			productReference = C20101010101010101010109 /* NotionLite.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C70101010101010101010101 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = C50101010101010101010102 /* Build configuration list for PBXProject "NotionLite" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = C30101010101010101010105;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = C30101010101010101010106 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C40101010101010101010101 /* NotionLite */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C60101010101010101010101 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C10101010101010101010101 /* NotionLiteApp.swift in Sources */,
+				C10101010101010101010102 /* ContentView.swift in Sources */,
+				C10101010101010101010103 /* Page.swift in Sources */,
+				C10101010101010101010104 /* Database.swift in Sources */,
+				C10101010101010101010105 /* PageListSidebar.swift in Sources */,
+				C10101010101010101010106 /* PageEditorView.swift in Sources */,
+				C10101010101010101010107 /* PageDetailPanel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C1010101011010101010110 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C1010101011010101010108 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		C80101010101010101010101 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		C80101010101010101010102 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		C80101010101010101010103 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Sources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.notionlite.app;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		C80101010101010101010104 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Sources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.notionlite.app;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C50101010101010101010102 /* Build configuration list for PBXProject "NotionLite" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C80101010101010101010101 /* Debug */,
+				C80101010101010101010102 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C50101010101010101010101 /* Build configuration list for PBXNativeTarget "NotionLite" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C80101010101010101010103 /* Debug */,
+				C80101010101010101010104 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+	};
+	rootObject = C70101010101010101010101 /* Project object */;
+}

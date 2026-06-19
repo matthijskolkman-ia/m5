@@ -1,0 +1,174 @@
+{
+  "catalog_name": "Midnight Archives \u2014 Vol. I",
+  "owner": "Elena Vasquez",
+  "total_tracks": 14,
+  "max_authorizations": 5,
+  "authorizations_used": 2,
+  "redeemed_codes": [
+    "VLTC-4F7A-9K2M",
+    "VLTC-8B3X-1P6Q"
+  ],
+  "auth_codes": [
+    "VLTC-4F7A-9K2M",
+    "VLTC-8B3X-1P6Q",
+    "VLTC-2H9W-5R4N",
+    "VLTC-7D1J-3L8T",
+    "VLTC-9C6Y-0S5V"
+  ],
+  "tracks": [
+    {
+      "id": 1,
+      "title": "Neon Rainfall",
+      "artist": "Elena Vasquez",
+      "album": "Midnight Archives Vol. I",
+      "year": 2023,
+      "genre": "Synthwave",
+      "duration": "4:12",
+      "bpm": 118,
+      "key": "F# minor"
+    },
+    {
+      "id": 2,
+      "title": "Concrete Jungle",
+      "artist": "Elena Vasquez",
+      "album": "Midnight Archives Vol. I",
+      "year": 2023,
+      "genre": "Industrial",
+      "duration": "3:47",
+      "bpm": 132,
+      "key": "D minor"
+    },
+    {
+      "id": 3,
+      "title": "Glass Cathedral",
+      "artist": "Elena Vasquez",
+      "album": "Midnight Archives Vol. I",
+      "year": 2023,
+      "genre": "Ambient",
+      "duration": "6:01",
+      "bpm": 86,
+      "key": "C major"
+    },
+    {
+      "id": 4,
+      "title": "Velvet Static",
+      "artist": "Elena Vasquez",
+      "album": "Midnight Archives Vol. I",
+      "year": 2023,
+      "genre": "Lo-Fi",
+      "duration": "3:22",
+      "bpm": 94,
+      "key": "A minor"
+    },
+    {
+      "id": 5,
+      "title": "Overdrive Boulevard",
+      "artist": "Elena Vasquez ft. Jax Rhythm",
+      "album": "Midnight Archives Vol. I",
+      "year": 2023,
+      "genre": "Electro-Funk",
+      "duration": "4:55",
+      "bpm": 126,
+      "key": "E minor"
+    },
+    {
+      "id": 6,
+      "title": "Waves at Dusk",
+      "artist": "Elena Vasquez",
+      "album": "Midnight Archives Vol. I",
+      "year": 2023,
+      "genre": "Chillwave",
+      "duration": "5:18",
+      "bpm": 80,
+      "key": "G major"
+    },
+    {
+      "id": 7,
+      "title": "Circuit Heart",
+      "artist": "Elena Vasquez",
+      "album": "Midnight Archives Vol. I",
+      "year": 2023,
+      "genre": "Synthpop",
+      "duration": "3:58",
+      "bpm": 120,
+      "key": "B\u266d minor"
+    },
+    {
+      "id": 8,
+      "title": "Beneath the Freeway",
+      "artist": "Elena Vasquez",
+      "album": "Midnight Archives Vol. I",
+      "year": 2023,
+      "genre": "Dark Ambient",
+      "duration": "7:12",
+      "bpm": 72,
+      "key": "D\u266d major"
+    },
+    {
+      "id": 9,
+      "title": "Chrome Sunset",
+      "artist": "Elena Vasquez",
+      "album": "Midnight Archives Vol. I",
+      "year": 2023,
+      "genre": "Retrowave",
+      "duration": "4:03",
+      "bpm": 110,
+      "key": "A\u266d minor"
+    },
+    {
+      "id": 10,
+      "title": "Subway Ghosts",
+      "artist": "Elena Vasquez",
+      "album": "Midnight Archives Vol. I",
+      "year": 2023,
+      "genre": "Trip-Hop",
+      "duration": "4:44",
+      "bpm": 88,
+      "key": "C minor"
+    },
+    {
+      "id": 11,
+      "title": "Liquid Geometry",
+      "artist": "Elena Vasquez",
+      "album": "Midnight Archives Vol. I",
+      "year": 2024,
+      "genre": "IDM",
+      "duration": "5:30",
+      "bpm": 140,
+      "key": "E\u266d minor"
+    },
+    {
+      "id": 12,
+      "title": "Fading Headlights",
+      "artist": "Elena Vasquez",
+      "album": "Midnight Archives Vol. I",
+      "year": 2024,
+      "genre": "Downtempo",
+      "duration": "4:19",
+      "bpm": 76,
+      "key": "B minor"
+    },
+    {
+      "id": 13,
+      "title": "Skyline Protocol",
+      "artist": "Elena Vasquez & The Grid",
+      "album": "Midnight Archives Vol. I",
+      "year": 2024,
+      "genre": "Cyberpunk",
+      "duration": "5:02",
+      "bpm": 144,
+      "key": "G minor"
+    },
+    {
+      "id": 14,
+      "title": "Last Train Home",
+      "artist": "Elena Vasquez",
+      "album": "Midnight Archives Vol. I",
+      "year": 2024,
+      "genre": "Post-Rock",
+      "duration": "8:17",
+      "bpm": 64,
+      "key": "E major"
+    }
+  ]
+}

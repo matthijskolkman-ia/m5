@@ -1,0 +1,24 @@
+name: Dishwasher
+options:
+  bundleIdPrefix: com.dishwasher
+  deploymentTarget:
+    macOS: "14.0"
+
+targets:
+  Dishwasher:
+    type: application
+    platform: macOS
+    sources: Sources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dishwasher.app
+        SWIFT_VERSION: "5.9"
+    info:
+      path: Sources/Info.plist
+      properties:
+        CFBundleName: Dishwasher
+        CFBundleDisplayName: Dishwasher
+        CFBundleVersion: "1"
+        CFBundleShortVersionString: "1.0"
+        NSHighResolutionCapable: true
+        LSMinimumSystemVersion: "14.0"
