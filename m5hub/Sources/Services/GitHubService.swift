@@ -56,9 +56,11 @@ class GitHubService: ObservableObject {
             let date = String(html[dateRange])
             let level = Int(html[levelRange]) ?? 0
 
-            // Count from text between >count<
-            if let countStart = html.range(of: ">", options: [], range: m.range.upperBound..<html.index(m.range.upperBound, offsetBy: 20)),
-               let countEnd = html.range(of: "<", range: countStart.upperBound..<html.index(countStart.upperBound, offsetBy: 20)) {
+            // Count from text after the data-level td
+            let afterTD = String.Index(utf16Offset: m.range.upperBound, in: html)
+            let limitIdx = String.Index(utf16Offset: min(m.range.upperBound + 30, html.utf16.count), in: html)
+            if let countStart = html.range(of: ">", options: [], range: afterTD..<limitIdx),
+               let countEnd = html.range(of: "<", range: countStart.upperBound..<String.Index(utf16Offset: min(html.utf16.count, m.range.upperBound + 50), in: html)) {
                 let countStr = String(html[countStart.upperBound..<countEnd.lowerBound])
                 let count = countStr.contains("No") ? 0 : (Int(countStr.filter { $0.isNumber }) ?? 0)
                 days.append((date, count, level))

@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct GitView: View {
-    @StateObject private gh = GitHubService()
+    @StateObject private var gh = GitHubService()
     @State private var usernameInput = UserDefaults.standard.string(forKey: "github_user") ?? ""
 
     var body: some View {

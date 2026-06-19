@@ -189,7 +189,6 @@ struct AgentChatView: View {
         let userMsg = AgentMessage(id: 0, projectId: agent.id, role: "user", content: input, timestamp: ISO8601DateFormatter().string(from: Date()))
         Database.shared.saveMessage(userMsg)
         messages.append(userMsg)
-        let userInput = input
         input = ""
 
         runningAgents.insert(agent.id)
