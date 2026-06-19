@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weaving Visualizer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Weaving Visualizer</h1>
+      <p>Explore basic weaving structures with interactive warp/weft counts and patterns.</p>
+    </header>
+
+    <section class="controls">
+      <div class="control-row">
+        <label for="warpCount">Warp threads</label>
+        <input id="warpCount" type="number" min="4" max="80" value="20" />
+      </div>
+      <div class="control-row">
+        <label for="weftCount">Weft threads</label>
+        <input id="weftCount" type="number" min="4" max="80" value="20" />
+      </div>
+      <div class="control-row">
+        <label for="patternSelect">Pattern</label>
+        <select id="patternSelect">
+          <option value="plain">Plain weave</option>
+          <option value="twill">Twill weave</option>
+          <option value="basket">Basket weave</option>
+          <option value="herringbone">Herringbone</option>
+          <option value="diamond">Diamond draft</option>
+        </select>
+      </div>
+      <div class="control-row">
+        <label for="warpColor">Warp color</label>
+        <input id="warpColor" type="color" value="#ff7a18" />
+      </div>
+      <div class="control-row">
+        <label for="weftColor">Weft color</label>
+        <input id="weftColor" type="color" value="#1d4ed8" />
+      </div>
+      <div class="control-row checkbox-row">
+        <label><input id="showGrid" type="checkbox" checked /> Show grid</label>
+      </div>
+      <button id="redraw">Redraw</button>
+    </section>
+
+    <section class="canvas-panel">
+      <canvas id="weaveCanvas" width="800" height="800"></canvas>
+      <div class="legend">
+        <p><strong>Legend</strong></p>
+        <p>Warp threads run vertically. Weft threads run horizontally.</p>
+        <p>Light segments are undercrossings; dark segments are overcrossings.</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

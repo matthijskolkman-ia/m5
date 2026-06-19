@@ -1,0 +1,115 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #11151f;
+  color: #f4f7fb;
+}
+
+main {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+header {
+  margin-bottom: 24px;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 3rem);
+}
+
+p {
+  margin: 12px 0 0;
+  line-height: 1.6;
+  color: #cbd0dd;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.control-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.control-row label,
+.checkbox-row label {
+  font-size: 0.94rem;
+  color: #dfe4f0;
+}
+
+.control-row input[type="number"],
+.control-row select,
+.control-row input[type="color"] {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid #2f3846;
+  background: #1b2432;
+  color: #f4f7fb;
+}
+
+.checkbox-row {
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: auto;
+}
+
+button#redraw {
+  grid-column: span 2;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 14px;
+  background: #2d7df7;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 120ms ease, background 120ms ease;
+}
+
+button#redraw:hover {
+  transform: translateY(-1px);
+  background: #1d68ec;
+}
+
+.canvas-panel {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+canvas {
+  width: 100%;
+  max-height: 800px;
+  border-radius: 24px;
+  background: #0d1320;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+}
+
+.legend {
+  padding: 18px;
+  border-radius: 20px;
+  background: rgba(17, 24, 40, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: #b8c1db;
+}
+
+@media (max-width: 640px) {
+  main {
+    padding: 16px;
+  }
+  button#redraw {
+    grid-column: span 1;
+  }
+}

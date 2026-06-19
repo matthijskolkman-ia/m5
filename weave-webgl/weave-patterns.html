@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>12 Weave Pattern Generations - Contrefaçon Style</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      padding: 24px 16px;
+    }
+
+    .container {
+      max-width: 1680px;
+      margin: 0 auto;
+      padding: 0 10px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.25rem;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #ff7a18, #f59e0b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #aaa;
+      margin-bottom: 40px;
+      font-size: 1rem;
+      max-width: 860px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.5;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 36px;
+    }
+
+    .generation {
+      background: #151626;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      overflow: hidden;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.25);
+      min-height: 440px;
+    }
+
+    .generation-header {
+      padding: 20px;
+      background: linear-gradient(135deg, rgba(255, 122, 24, 0.1), rgba(245, 158, 11, 0.1));
+      border-bottom: 1px solid #2a2a3e;
+    }
+
+    .generation-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .generation-desc {
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    .canvas-wrapper {
+      width: 100%;
+      min-height: 260px;
+      aspect-ratio: 16 / 10;
+      background: #0a1120;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hud-panel {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px;
+      background: rgba(4, 8, 20, 0.86);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      backdrop-filter: blur(12px);
+      z-index: 2;
+    }
+
+    .hud-button {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border: none;
+      font-size: 0.95rem;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .hud-button:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    .hud-info {
+      color: #d2d2e0;
+      font-size: 0.78rem;
+      line-height: 1.3;
+      min-width: 120px;
+      display: grid;
+      gap: 2px;
+    }
+
+    canvas {
+      max-width: 100%;
+      max-height: 100%;
+      display: block;
+    }
+
+    .generation-footer {
+      padding: 12px 18px;
+      background: rgba(0, 0, 0, 0.28);
+      font-size: 0.82rem;
+      color: #b0b0c2;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .controls .controls-summary {
+      color: #ddd;
+      font-size: 0.95rem;
+      min-width: 120px;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+    }
+
+    .controls button {
+      background: linear-gradient(135deg, #ff7a18, #f59e0b);
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 0;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .controls button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 122, 24, 0.3);
+    }
+
+    .controls button:active {
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>12 Weave Pattern Generations</h1>
+    <p class="subtitle">Contrefaçon-inspired scale & mesh patterns with dynamic animations</p>
+
+    <div class="controls">
+      <button onclick="window.startAllAnimations()">▶ Start All</button>
+      <button onclick="window.stopAllAnimations()">⏸ Stop All</button>
+      <button onclick="window.toggleAllPaused()">⏸/▶ Pause All</button>
+      <button onclick="window.prevPatternAll()">◀ Prev Pattern</button>
+      <button onclick="window.nextPatternAll()">Next Pattern ▶</button>
+      <button onclick="window.slowerAll()">− Slower</button>
+      <button onclick="window.fasterAll()">Faster +</button>
+      <button id="discoverNetworkBtn">Discover Local Network</button>
+      <div class="controls-summary">Network: <strong id="networkStatus">unknown</strong></div>
+      <div class="controls-summary">Local shading: <strong id="networkShade">off</strong></div>
+      <div class="controls-summary">Avg speed: <strong id="averageSpeed">1.00x</strong></div>
+    </div>
+
+    <div class="grid" id="generationsContainer"></div>
+  </div>
+
+  <script src="./weave-patterns-webgl.js"></script>
+</body>
+</html>
