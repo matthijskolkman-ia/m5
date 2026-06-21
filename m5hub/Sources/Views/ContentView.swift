@@ -20,6 +20,12 @@ struct ContentView: View {
                     Image(systemName: "arrow.triangle.branch")
                     Text("Git")
                 }
+
+            AirScanView()
+                .tabItem {
+                    Image(systemName: "antenna.radiowaves.left.and.right")
+                    Text("AirScan")
+                }
         }
         .preferredColorScheme(.dark)
     }

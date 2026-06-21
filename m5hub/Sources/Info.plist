@@ -36,6 +36,10 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>NFCReaderUsageDescription</key>
+	<string>m5 Hub reads NFC tags to show you what&apos;s around you.</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>m5 Hub scans for nearby Bluetooth devices.</string>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

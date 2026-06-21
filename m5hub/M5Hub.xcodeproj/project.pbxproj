@@ -16,6 +16,7 @@
 		58CE2DB7AC79457FB516C474 /* NotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE7976B66293408A986E2932 /* NotesView.swift */; };
 		1C9D2C588B5147659CBCE742 /* AgentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13E4C2F2A31A4897B83C9EBC /* AgentsView.swift */; };
 		7D133470CEA2436CA53E920E /* GitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB5481D5D14F77829D8C69 /* GitView.swift */; };
+		A9362E378BD148418AB7BDCE /* AirScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A999B9C557F419B9198CC61 /* AirScanView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		13E4C2F2A31A4897B83C9EBC /* AgentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentsView.swift; sourceTree = "<group>"; };
 		AFBB5481D5D14F77829D8C69 /* GitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitView.swift; sourceTree = "<group>"; };
 		B066282D8D14492F9A8C17F7 /* M5Hub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = M5Hub.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A999B9C557F419B9198CC61 /* AirScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirScanView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -55,6 +57,7 @@
 		E7D0F4CFAD0247FF81BD1AFF /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				7A999B9C557F419B9198CC61 /* AirScanView.swift */,
 				EAD7CFEB5E394B06BB928354 /* ContentView.swift */,
 				AE7976B66293408A986E2932 /* NotesView.swift */,
 				13E4C2F2A31A4897B83C9EBC /* AgentsView.swift */,
@@ -137,6 +140,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9362E378BD148418AB7BDCE /* AirScanView.swift in Sources */,
 				1AA1295CF9C346279A95FD42 /* M5HubApp.swift in Sources */,
 				55653DA7E2C444579A39E54C /* Note.swift in Sources */,
 				B0CF962EAA2E4D4B9B00F8B7 /* AgentProject.swift in Sources */,
