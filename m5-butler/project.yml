@@ -1,0 +1,24 @@
+name: M5Butler
+options:
+  bundleIdPrefix: com.m5butler
+  deploymentTarget:
+    macOS: "14.0"
+
+targets:
+  M5Butler:
+    type: application
+    platform: macOS
+    sources: Sources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.m5butler.app
+        SWIFT_VERSION: "5.9"
+    info:
+      path: Sources/Info.plist
+      properties:
+        CFBundleName: M5 Butler
+        CFBundleDisplayName: M5 Butler
+        CFBundleVersion: "1"
+        CFBundleShortVersionString: "1.0"
+        LSUIElement: true
+        NSHighResolutionCapable: true

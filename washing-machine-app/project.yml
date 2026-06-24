@@ -1,0 +1,22 @@
+name: WashingMachine
+options:
+  bundleIdPrefix: com.washingmachine
+  deploymentTarget:
+    macOS: "14.0"
+
+targets:
+  WashingMachine:
+    type: application
+    platform: macOS
+    sources: Sources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.washingmachine.app
+        SWIFT_VERSION: "5.9"
+    info:
+      path: Sources/Info.plist
+      properties:
+        CFBundleName: "Washing Machine"
+        CFBundleDisplayName: "Washing Machine"
+        CFBundleVersion: "1"
+        CFBundleShortVersionString: "1.0"

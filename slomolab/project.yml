@@ -1,0 +1,32 @@
+name: SloMoLab
+options:
+  bundleIdPrefix: com.slomolab
+  deploymentTarget:
+    iOS: "18.0"
+
+targets:
+  SloMoLab:
+    type: application
+    platform: iOS
+    sources: Sources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.slomolab.app
+        SWIFT_VERSION: "5.9"
+        DEVELOPMENT_TEAM: 69AYY329Y5
+        CODE_SIGN_STYLE: Automatic
+    info:
+      path: Sources/Info.plist
+      properties:
+        CFBundleName: SloMoLab
+        CFBundleDisplayName: SloMoLab
+        CFBundleVersion: "1"
+        CFBundleShortVersionString: "1.0"
+        NSCameraUsageDescription: "To scan slow-motion formats on your iPhone."
+        NSMicrophoneUsageDescription: "To record audio with slow-motion video."
+        NSPhotoLibraryUsageDescription: "To save recorded slow-motion videos."
+        UILaunchScreen: {}
+        UIRequiredDeviceCapabilities: ["arm64"]
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeRight

@@ -33,6 +33,12 @@ struct ContentView: View {
                     Image(systemName: "newspaper.fill")
                     Text("News")
                 }
+
+            M5View()
+                .tabItem {
+                    Image(systemName: "cpu.fill")
+                    Text("M5")
+                }
         }
         .onAppear {
             weather.fetch(for: weatherCity)

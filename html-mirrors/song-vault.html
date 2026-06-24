@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Song Vault — HTML Edition</title>
+<style>
+  :root {
+    --bg: #0a0a0f; --surface: #12121a; --card: #181825; --border: #252538;
+    --text: #c8ccd4; --muted: #6b6e7b; --accent: #a78bfa; --gold: #f59e0b;
+    --green: #22c55e; --red: #ef4444; --radius: 12px;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    background: var(--bg); color: var(--text); min-height: 100vh;
+    display: flex; flex-direction: column;
+  }
+  .header { text-align:center; padding: 40px 24px 24px; }
+  .header .icon { font-size: 2.5rem; margin-bottom: 8px; }
+  .header h1 { font-size: 1.5rem; font-weight:700; color:#f0f0f5; }
+  .header .sub { color:var(--muted); font-size:0.85rem; margin-top:4px; }
+  .header .owner { display:inline-flex; align-items:center; gap:6px; margin-top:8px;
+    background:var(--surface); border:1px solid var(--border); border-radius:20px;
+    padding:4px 14px; font-size:0.78rem; color:var(--muted); }
+
+  .auth-banner { max-width:500px; margin:0 auto 32px; background:var(--surface);
+    border:1px solid var(--border); border-radius:var(--radius); padding:24px; text-align:center; }
+  .auth-banner.unlocked { border-color:var(--green); }
+  .auth-banner h2 { font-size:1.05rem; color:#e0e0e8; margin-bottom:4px; }
+  .auth-banner p { color:var(--muted); font-size:0.8rem; margin-bottom:12px; }
+  .code-row { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+  .code-row input {
+    background:var(--bg); border:1px solid var(--border); border-radius:8px;
+    padding:10px 14px; color:var(--text); font-family:'SF Mono',monospace;
+    font-size:0.9rem; text-align:center; letter-spacing:0.12em; width:200px;
+    outline:none; text-transform:uppercase;
+  }
+  .code-row input:focus { border-color:var(--accent); }
+  .btn {
+    padding:10px 20px; border-radius:8px; border:none; font-weight:600;
+    font-size:0.85rem; cursor:pointer; transition:all 0.2s;
+  }
+  .btn-primary { background:var(--accent); color:#fff; }
+  .btn-primary:hover { background:#7c3aed; }
+  .btn-primary:disabled { opacity:0.4; cursor:not-allowed; }
+  .btn-sm { padding:6px 14px; font-size:0.75rem; background:var(--surface); 
+    border:1px solid var(--border); color:var(--text); border-radius:6px; cursor:pointer; }
+  .btn-sm:hover { border-color:var(--accent); }
+
+  .msg { margin-top:8px; font-size:0.78rem; min-height:18px; }
+  .msg.err { color:var(--red); } .msg.ok { color:var(--green); }
+  .badge { display:inline-block; margin-top:8px; font-size:0.72rem; color:var(--gold);
+    background:rgba(245,158,11,0.1); border-radius:12px; padding:3px 10px; }
+  .badge.exhausted { color:var(--red); background:rgba(239,68,68,0.1); }
+
+  .container { max-width:800px; margin:0 auto; padding:0 24px 48px; width:100%; }
+  .track-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap:10px; }
+  .track-card {
+    background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+    padding:16px 18px; display:flex; align-items:center; gap:14px; position:relative; overflow:hidden;
+  }
+  .track-num { font-size:1.3rem; font-weight:700; color:var(--accent); min-width:24px; text-align:right; }
+  .track-info { flex:1; min-width:0; }
+  .track-title { font-weight:600; font-size:0.9rem; color:#e4e4ee; }
+  .track-artist { font-size:0.78rem; color:var(--muted); margin-top:2px; }
+  .track-meta { display:flex; gap:8px; margin-top:5px; flex-wrap:wrap; }
+  .track-meta span { font-size:0.65rem; color:var(--muted); background:rgba(255,255,255,0.03);
+    border-radius:4px; padding:2px 6px; }
+  .track-dur { font-size:0.8rem; color:var(--muted); font-variant-numeric:tabular-nums; flex-shrink:0; }
+  .locked .track-title, .locked .track-artist, .locked .track-meta span { filter:blur(5px); user-select:none; }
+  .lock-overlay {
+    display:none; position:absolute; inset:0; background:rgba(10,10,15,0.7);
+    align-items:center; justify-content:center; border-radius:var(--radius);
+  }
+  .locked .lock-overlay { display:flex; }
+  footer { text-align:center; color:var(--muted); font-size:0.7rem; padding:24px; margin-top:auto; }
+  .admin { max-width:500px; margin:0 auto 24px; text-align:center; }
+  .admin summary { color:var(--muted); font-size:0.7rem; cursor:pointer; }
+  .admin .codes { display:flex; gap:6px; flex-wrap:wrap; justify-content:center; margin-top:8px; }
+  .admin .codes code {
+    background:var(--surface); border:1px solid var(--border); border-radius:6px;
+    padding:4px 10px; font-size:0.7rem; font-family:'SF Mono',monospace;
+    color:var(--muted); cursor:pointer;
+  }
+  .admin .codes code:hover { border-color:var(--accent); color:var(--accent); }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="icon" id="headerIcon">🔒</div>
+  <h1 id="headerTitle">Midnight Archives — Vol. I</h1>
+  <p class="sub">14 tracks · Electronic / Synth</p>
+  <div class="owner">© Elena Vasquez <span id="authBadge" style="display:none;color:var(--green);">✓ Authorized</span></div>
+</header>
+
+<div class="admin">
+  <details><summary>🔑 Show auth codes</summary>
+    <div class="codes" id="codeList"></div>
+  </details>
+</div>
+
+<div class="auth-banner" id="authBanner">
+  <div style="font-size:2rem;">🔐</div>
+  <h2>Authorization Required</h2>
+  <p>Enter a valid code to unlock this catalog.</p>
+  <div class="code-row">
+    <input type="text" id="codeInput" placeholder="VLTC-XXXX-XXXX" maxlength="14" autocomplete="off" spellcheck="false">
+    <button class="btn btn-primary" id="unlockBtn" onclick="unlock()">Unlock</button>
+  </div>
+  <div class="msg" id="msg"></div>
+  <div class="badge" id="remainingBadge"><span id="remCount">5</span> / 5 authorizations remaining</div>
+</div>
+
+<div class="container">
+  <div class="track-grid" id="trackGrid"></div>
+</div>
+
+<footer>Song Vault · HTML Edition · <span id="footerRem">5 of 5</span> licenses available</footer>
+
+<script>
+// ── Data ──
+const catalog = {
+  name: "Midnight Archives — Vol. I",
+  owner: "Elena Vasquez",
+  maxAuth: 5,
+  tracks: [
+    { id:1, title:"Neon Rainfall", artist:"Elena Vasquez", year:2023, genre:"Synthwave", dur:"4:12", bpm:118, key:"F# minor" },
+    { id:2, title:"Concrete Jungle", artist:"Elena Vasquez", year:2023, genre:"Industrial", dur:"3:47", bpm:132, key:"D minor" },
+    { id:3, title:"Glass Cathedral", artist:"Elena Vasquez", year:2023, genre:"Ambient", dur:"6:01", bpm:86, key:"C major" },
+    { id:4, title:"Velvet Static", artist:"Elena Vasquez", year:2023, genre:"Lo-Fi", dur:"3:22", bpm:94, key:"A minor" },
+    { id:5, title:"Overdrive Boulevard", artist:"Elena Vasquez ft. Jax Rhythm", year:2023, genre:"Electro-Funk", dur:"4:55", bpm:126, key:"E minor" },
+    { id:6, title:"Waves at Dusk", artist:"Elena Vasquez", year:2023, genre:"Chillwave", dur:"5:18", bpm:80, key:"G major" },
+    { id:7, title:"Circuit Heart", artist:"Elena Vasquez", year:2023, genre:"Synthpop", dur:"3:58", bpm:120, key:"B♭ minor" },
+    { id:8, title:"Beneath the Freeway", artist:"Elena Vasquez", year:2023, genre:"Dark Ambient", dur:"7:12", bpm:72, key:"D♭ major" },
+    { id:9, title:"Chrome Sunset", artist:"Elena Vasquez", year:2023, genre:"Retrowave", dur:"4:03", bpm:110, key:"A♭ minor" },
+    { id:10, title:"Subway Ghosts", artist:"Elena Vasquez", year:2023, genre:"Trip-Hop", dur:"4:44", bpm:88, key:"C minor" },
+    { id:11, title:"Liquid Geometry", artist:"Elena Vasquez", year:2024, genre:"IDM", dur:"5:30", bpm:140, key:"E♭ minor" },
+    { id:12, title:"Fading Headlights", artist:"Elena Vasquez", year:2024, genre:"Downtempo", dur:"4:19", bpm:76, key:"B minor" },
+    { id:13, title:"Skyline Protocol", artist:"Elena Vasquez & The Grid", year:2024, genre:"Cyberpunk", dur:"5:02", bpm:144, key:"G minor" },
+    { id:14, title:"Last Train Home", artist:"Elena Vasquez", year:2024, genre:"Post-Rock", dur:"8:17", bpm:64, key:"E major" },
+  ],
+  codes: ["VLTC-4F7A-9K2M","VLTC-8B3X-1P6Q","VLTC-2H9W-5R4N","VLTC-7D1J-3L8T","VLTC-9C6Y-0S5V"]
+};
+
+// ── State (localStorage) ──
+const STORE_KEY = 'song_vault_state';
+function loadState() {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY)) || { used:0, redeemed:[] }; }
+  catch { return { used:0, redeemed:[] }; }
+}
+function saveState(s) { localStorage.setItem(STORE_KEY, JSON.stringify(s)); }
+let state = loadState();
+
+// ── Render tracks ──
+function renderTracks(unlocked) {
+  const grid = document.getElementById('trackGrid');
+  grid.innerHTML = catalog.tracks.map(t => `
+    <div class="track-card ${unlocked ? '' : 'locked'}">
+      <div class="track-num">${String(t.id).padStart(2,'0')}</div>
+      <div class="track-info">
+        <div class="track-title">${t.title}</div>
+        <div class="track-artist">${t.artist}</div>
+        <div class="track-meta">
+          <span>${t.genre}</span><span>${t.year}</span><span>${t.bpm} BPM</span><span>${t.key}</span>
+        </div>
+      </div>
+      ${unlocked ? `<div class="track-dur">${t.dur}</div>` : '<div style="font-size:1.2rem;opacity:0.4;flex-shrink:0;">🔒</div><div class="lock-overlay"><span>🔒</span></div>'}
+    </div>
+  `).join('');
+}
+
+// ── Render UI state ──
+function renderUI(unlocked) {
+  const rem = catalog.maxAuth - state.used;
+  document.getElementById('headerIcon').textContent = unlocked ? '🔓' : '🔒';
+  document.getElementById('authBadge').style.display = unlocked ? 'inline' : 'none';
+  document.getElementById('remCount').textContent = rem;
+  document.getElementById('footerRem').textContent = `${rem} of ${catalog.maxAuth}`;
+  const badge = document.getElementById('remainingBadge');
+  badge.classList.toggle('exhausted', rem === 0);
+
+  const banner = document.getElementById('authBanner');
+  if (unlocked) {
+    banner.className = 'auth-banner unlocked';
+    banner.innerHTML = '<div style="font-size:2rem;">✅</div><h2>Catalog Unlocked</h2><p>All tracks are now visible.</p><div class="badge" id="remainingBadge"><span id="remCount">'+rem+'</span> / 5 authorizations remaining</div>';
+  } else {
+    banner.className = 'auth-banner';
+    banner.innerHTML = '<div style="font-size:2rem;">🔐</div><h2>Authorization Required</h2><p>Enter a valid code to unlock this catalog.</p><div class="code-row"><input type="text" id="codeInput" placeholder="VLTC-XXXX-XXXX" maxlength="14" autocomplete="off" spellcheck="false"><button class="btn btn-primary" id="unlockBtn" onclick="unlock()">Unlock</button></div><div class="msg" id="msg"></div><div class="badge" id="remainingBadge"><span id="remCount">'+rem+'</span> / 5 authorizations remaining</div>';
+    setupInputFormatting();
+  }
+  renderTracks(unlocked);
+  renderCodeList();
+}
+
+// ── Code input formatting ──
+function setupInputFormatting() {
+  const inp = document.getElementById('codeInput');
+  if (!inp) return;
+  inp.addEventListener('input', function() {
+    let v = this.value.replace(/[^A-Za-z0-9]/g,'').toUpperCase().slice(0,12);
+    if (v.length > 8) v = v.slice(0,4)+'-'+v.slice(4,8)+'-'+v.slice(8);
+    else if (v.length > 4) v = v.slice(0,4)+'-'+v.slice(4);
+    this.value = v;
+  });
+  inp.addEventListener('keydown', e => { if (e.key==='Enter') unlock(); });
+}
+
+// ── Unlock ──
+function unlock() {
+  const inp = document.getElementById('codeInput');
+  const code = inp ? inp.value.trim().toUpperCase() : '';
+  const msg = document.getElementById('msg');
+  if (!code || code.length < 12) { msg.textContent='Enter a valid code'; msg.className='msg err'; return; }
+
+  if (state.used >= catalog.maxAuth) {
+    msg.textContent='Maximum authorizations reached.'; msg.className='msg err'; return;
+  }
+  if (!catalog.codes.includes(code)) {
+    msg.textContent='Invalid authorization code.'; msg.className='msg err'; return;
+  }
+  if (state.redeemed.includes(code)) {
+    msg.textContent='Code already redeemed.'; msg.className='msg err'; return;
+  }
+
+  state.redeemed.push(code);
+  state.used++;
+  saveState(state);
+  msg.textContent=`Catalog unlocked! ${catalog.maxAuth - state.used} remaining.`;
+  msg.className='msg ok';
+  setTimeout(() => renderUI(true), 600);
+}
+
+// ── Code list ──
+function renderCodeList() {
+  document.getElementById('codeList').innerHTML = catalog.codes.map(c => {
+    const used = state.redeemed.includes(c);
+    return `<code style="${used?'opacity:0.3;text-decoration:line-through':''}" onclick="${used?'':'navigator.clipboard.writeText(\''+c+'\')'}">${c}</code>`;
+  }).join('');
+}
+
+// ── Init ──
+const savedUnlocked = state.used > 0 && state.redeemed.length > 0;
+renderUI(savedUnlocked);
+if (!savedUnlocked) setupInputFormatting();
+</script>
+</body>
+</html>

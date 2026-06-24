@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M5 Project Universe</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { 
+    background: #000; 
+    overflow: hidden; 
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  }
+  canvas { display: block; }
+  #info {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #888;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<div id="info">🖱️ Drag to rotate · Scroll to zoom · Built on M5</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+// ── Scene ──
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x000011, 0.00003);
+
+// ── Camera ──
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.set(0, 1, 7);
+camera.lookAt(0, 0, 0);
+
+// ── Renderers ──
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+document.body.appendChild(renderer.domElement);
+
+const labelRenderer = new CSS2DRenderer();
+labelRenderer.setSize(window.innerWidth, window.innerHeight);
+labelRenderer.domElement.style.position = 'fixed';
+labelRenderer.domElement.style.top = '0';
+labelRenderer.domElement.style.pointerEvents = 'none';
+document.body.appendChild(labelRenderer.domElement);
+
+// ── Controls ──
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.minDistance = 3;
+controls.maxDistance = 14;
+controls.maxPolarAngle = Math.PI * 0.75;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 0.3;
+controls.target.set(0, 0, 0);
+
+// ── Stars ──
+const starsGeo = new THREE.BufferGeometry();
+const starsCount = 2000;
+const starsPos = new Float32Array(starsCount * 3);
+for (let i = 0; i < starsCount * 3; i += 3) {
+  starsPos[i] = (Math.random() - 0.5) * 30;
+  starsPos[i+1] = (Math.random() - 0.5) * 20;
+  starsPos[i+2] = (Math.random() - 0.5) * 15;
+}
+starsGeo.setAttribute('position', new THREE.BufferAttribute(starsPos, 3));
+const starsMat = new THREE.PointsMaterial({ color: 0x8888cc, size: 0.015, transparent: true, opacity: 0.7 });
+const stars = new THREE.Points(starsGeo, starsMat);
+scene.add(stars);
+
+// ── Lighting ──
+const ambient = new THREE.AmbientLight(0x222244, 0.6);
+scene.add(ambient);
+const key = new THREE.DirectionalLight(0xffffff, 1.5);
+key.position.set(5, 8, 5);
+key.castShadow = true;
+scene.add(key);
+const rim = new THREE.DirectionalLight(0x8866ff, 0.6);
+rim.position.set(-3, -1, -3);
+scene.add(rim);
+
+// ── Projects ──
+const projects = [
+  { name: 'Deep Data\nDetective', emoji: '🕵️', color: 0x58a6ff, desc: 'AI-powered CSV analysis · 9-phase EDA · DeepSeek', pos: [-2.2, 0.8, 0] },
+  { name: 'Song\nVault', emoji: '🔒', color: 0xa78bfa, desc: 'Locked music catalog · Flask + iOS · 5 auth codes', pos: [0, 1.4, 0] },
+  { name: 'Remote\nApproval', emoji: '📱', color: 0xf59e0b, desc: 'Phone pings for approvals · Telegram + Pushover', pos: [2.2, 0.8, 0] },
+  { name: 'Vision\nRepair', emoji: '🔧', color: 0x22c55e, desc: '3D SceneKit bench · 25/50/25 grid · Diagnostics', pos: [-2.2, -0.6, 0] },
+  { name: 'Solar\nSystem', emoji: '🪐', color: 0xf97316, desc: '8 planets orbiting · Procedural textures · visionOS', pos: [0, -1.2, 0] },
+  { name: 'SloMo\nLab', emoji: '📹', color: 0xef4444, desc: 'Slow-mo scanner · Live Photos · 120–480fps', pos: [2.2, -0.6, 0] },
+  { name: 'Leica\nCam', emoji: '🔴', color: 0xff0000, desc: 'Focus peaking · Frame lines · Rangefinder style', pos: [0, 0, 1.6] },
+  { name: 'Diskette\nMap', emoji: '🗺️', color: 0x06b6d4, desc: 'visionOS MapKit · Amsterdam address · Spatial', pos: [0, 2.2, -0.8] },
+];
+
+// ── Orbits ──
+const orbitGeo = new THREE.TorusGeometry(1.85, 0.003, 16, 120);
+const orbitMat = new THREE.MeshBasicMaterial({ color: 0x334466, transparent: true, opacity: 0.3 });
+const orbit1 = new THREE.Mesh(orbitGeo, orbitMat);
+orbit1.rotation.x = Math.PI / 2;
+scene.add(orbit1);
+const orbit2 = new THREE.Mesh(new THREE.TorusGeometry(2.2, 0.002, 16, 120), new THREE.MeshBasicMaterial({ color: 0x334466, transparent: true, opacity: 0.2 }));
+orbit2.rotation.x = Math.PI / 2;
+orbit2.rotation.z = Math.PI / 6;
+scene.add(orbit2);
+
+// ── Center glow ──
+const glowGeo = new THREE.SphereGeometry(0.15, 32, 32);
+const glowMat = new THREE.MeshStandardMaterial({ color: 0x8866ff, emissive: 0x6644cc, emissiveIntensity: 2, roughness: 0.2 });
+const glow = new THREE.Mesh(glowGeo, glowMat);
+scene.add(glow);
+
+// ── Create project cards ──
+projects.forEach((proj, i) => {
+  // Card
+  const cardGeo = new THREE.BoxGeometry(0.65, 0.5, 0.06, 2, 2, 2);
+  const cardMat = new THREE.MeshStandardMaterial({ 
+    color: proj.color, 
+    roughness: 0.4, 
+    metalness: 0.6,
+    emissive: proj.color,
+    emissiveIntensity: 0.2
+  });
+  const card = new THREE.Mesh(cardGeo, cardMat);
+  card.position.set(...proj.pos);
+  card.castShadow = true;
+  card.receiveShadow = true;
+  scene.add(card);
+
+  // Glow ring
+  const ringGeo = new THREE.TorusGeometry(0.38, 0.015, 16, 32);
+  const ringMat = new THREE.MeshStandardMaterial({ 
+    color: proj.color, 
+    emissive: proj.color, 
+    emissiveIntensity: 0.6, 
+    roughness: 0.2 
+  });
+  const ring = new THREE.Mesh(ringGeo, ringMat);
+  ring.position.copy(card.position);
+  ring.rotation.x = Math.PI / 2;
+  scene.add(ring);
+
+  // CSS2D Label
+  const labelDiv = document.createElement('div');
+  labelDiv.innerHTML = `<div style="
+    text-align: center; 
+    color: #fff; 
+    font-weight: 600; 
+    font-size: 12px; 
+    line-height: 1.3;
+    text-shadow: 0 0 12px rgba(0,0,0,0.8);
+    white-space: pre-line;
+  ">${proj.emoji}<br>${proj.name}</div>`;
+  const label = new CSS2DObject(labelDiv);
+  label.position.copy(card.position);
+  label.position.z += 0.08;
+  label.userData = { ring, desc: proj.desc, color: proj.color };
+  scene.add(label);
+
+  // Tooltip (hidden by default)
+  const tipDiv = document.createElement('div');
+  tipDiv.innerHTML = `<div style="
+    background: rgba(0,0,0,0.85); 
+    color: #ccc; 
+    font-size: 10px; 
+    padding: 6px 10px; 
+    border-radius: 6px;
+    border: 1px solid ${'#' + proj.color.toString(16).padStart(6, '0')}44;
+    text-align: center;
+    max-width: 180px;
+  ">${proj.desc}</div>`;
+  const tooltip = new CSS2DObject(tipDiv);
+  tooltip.position.copy(card.position);
+  tooltip.position.y += 0.35;
+  tooltip.visible = false;
+  tooltip.userData = { isTooltip: true };
+  scene.add(tooltip);
+
+  label.userData.tooltip = tooltip;
+});
+
+// ── Raycaster for hover ──
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+let hovered = null;
+
+window.addEventListener('mousemove', (e) => {
+  mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+});
+
+// ── Particle ring ──
+const particleCount = 300;
+const particleGeo = new THREE.BufferGeometry();
+const particlePos = new Float32Array(particleCount * 3);
+for (let i = 0; i < particleCount; i++) {
+  const angle = (i / particleCount) * Math.PI * 2;
+  const radius = 1.8 + Math.sin(i * 0.5) * 0.3;
+  particlePos[i * 3] = Math.cos(angle) * radius;
+  particlePos[i * 3 + 1] = (Math.random() - 0.5) * 0.15;
+  particlePos[i * 3 + 2] = Math.sin(angle) * radius;
+}
+particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
+const particleMat = new THREE.PointsMaterial({ color: 0x8866ff, size: 0.02, transparent: true, opacity: 0.5 });
+const particles = new THREE.Points(particleGeo, particleMat);
+scene.add(particles);
+
+// ── Animate ──
+const clock = new THREE.Clock();
+
+function animate() {
+  requestAnimationFrame(animate);
+
+  const t = clock.getElapsedTime();
+
+  controls.update();
+
+  // Animate stars
+  stars.rotation.y += 0.0001;
+  stars.rotation.x += 0.00005;
+
+  // Pulse center glow
+  glow.material.emissiveIntensity = 2 + Math.sin(t * 2) * 0.5;
+  glow.scale.setScalar(1 + Math.sin(t * 1.5) * 0.1);
+
+  // Animate particles
+  particles.rotation.y += 0.002;
+
+  // Hover detection
+  raycaster.setFromCamera(mouse, camera);
+  const labels = scene.children.filter(c => c.isCSS2DObject && !c.userData.isTooltip);
+  const intersects = raycaster.intersectObjects(labels.map(l => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(0.7, 0.55));
+    m.position.copy(l.position);
+    m.quaternion.copy(camera.quaternion);
+    m.userData = { label: l };
+    return m;
+  }), false);
+
+  // Reset all
+  if (hovered) {
+    hovered.userData.ring.material.emissiveIntensity = 0.6;
+    if (hovered.userData.tooltip) hovered.userData.tooltip.visible = false;
+    hovered = null;
+  }
+
+  if (intersects.length > 0) {
+    const label = intersects[0].object.userData.label;
+    label.userData.ring.material.emissiveIntensity = 1.5;
+    if (label.userData.tooltip) label.userData.tooltip.visible = true;
+    hovered = label;
+  }
+
+  renderer.render(scene, camera);
+  labelRenderer.render(scene, camera);
+}
+
+animate();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  labelRenderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+</body>
+</html>

@@ -23,6 +23,8 @@ struct DashboardApp: App {
         WindowGroup {
             ContentView()
                 .frame(minWidth: 420, minHeight: 520)
+                .preferredColorScheme(.dark)
+                .background(Color(red: 0.06, green: 0.06, blue: 0.10))
         }
         .windowStyle(.hiddenTitleBar)
         .windowResizability(.contentSize)

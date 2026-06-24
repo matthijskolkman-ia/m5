@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Mirrors — HTML Editions</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    background: #0a0a0f;
+    color: #c8ccd4;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .container { max-width: 700px; padding: 40px 24px; }
+  h1 { font-size: 1.8rem; color: #f0f0f5; margin-bottom: 4px; }
+  .subtitle { color: #6b6e7b; font-size: 0.85rem; margin-bottom: 36px; }
+  .grid { display: flex; flex-direction: column; gap: 12px; }
+  a { text-decoration: none; }
+  .card {
+    display: flex; align-items: center; gap: 16px;
+    background: #12121a; border: 1px solid #252538; border-radius: 10px;
+    padding: 18px 20px; transition: border-color 0.2s, transform 0.15s;
+  }
+  .card:hover { border-color: #a78bfa; transform: translateX(4px); }
+  .card .emoji { font-size: 1.6rem; }
+  .card h2 { font-size: 1rem; color: #e4e4ee; margin-bottom: 2px; }
+  .card p { font-size: 0.78rem; color: #6b6e7b; }
+  footer { text-align: center; color: #3a3a4a; font-size: 0.7rem; margin-top: 40px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>📂 Project Mirrors</h1>
+  <p class="subtitle">Self-contained HTML remakes · No servers, no installs</p>
+  <div class="grid">
+    <a href="song-vault.html">
+      <div class="card">
+        <span class="emoji">🔒</span>
+        <div><h2>Song Vault</h2><p>Locked music catalog · 5 auth codes · Full unlock/lock flow</p></div>
+      </div>
+    </a>
+    <a href="solar-system.html">
+      <div class="card">
+        <span class="emoji">🪐</span>
+        <div><h2>Solar System</h2><p>8 planets orbiting · Tap for facts · 3D space</p></div>
+      </div>
+    </a>
+    <a href="diagnostic-bench.html">
+      <div class="card">
+        <span class="emoji">🔧</span>
+        <div><h2>Diagnostic Bench</h2><p>Vision Pro repair · Clickable components · Status cards</p></div>
+      </div>
+    </a>
+    <a href="leica-frame.html">
+      <div class="card">
+        <span class="emoji">🔴</span>
+        <div><h2>Leica Frame Lines</h2><p>35/50/90mm overlays · Rangefinder vibe · Photo viewer</p></div>
+      </div>
+    </a>
+  </div>
+  <footer>Built on M5 · June 2026</footer>
+</div>
+</body>
+</html>

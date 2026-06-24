@@ -1,0 +1,30 @@
+name: LeicaCam
+options:
+  bundleIdPrefix: com.leicacam
+  deploymentTarget:
+    iOS: "18.0"
+
+targets:
+  LeicaCam:
+    type: application
+    platform: iOS
+    sources: Sources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.leicacam.app
+        SWIFT_VERSION: "5.9"
+        DEVELOPMENT_TEAM: 69AYY329Y5
+        CODE_SIGN_STYLE: Automatic
+    info:
+      path: Sources/Info.plist
+      properties:
+        CFBundleName: LeicaCam
+        CFBundleDisplayName: LeicaCam
+        CFBundleVersion: "1"
+        CFBundleShortVersionString: "1.0"
+        NSCameraUsageDescription: "To simulate Leica lens optics."
+        NSPhotoLibraryUsageDescription: "To save Leica-style photos."
+        UILaunchScreen: {}
+        UIRequiredDeviceCapabilities: ["arm64"]
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationLandscapeRight

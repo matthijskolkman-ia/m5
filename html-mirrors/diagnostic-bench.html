@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnostic Bench — HTML Edition</title>
+<style>
+  :root {
+    --bg:#0a0a0f; --surface:#12121a; --card:#181825; --border:#252538;
+    --text:#c8ccd4; --muted:#6b6e7b; --green:#22c55e; --orange:#f59e0b;
+    --red:#ef4444; --amber:#f97316;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    background:var(--bg); color:var(--text); min-height:100vh;
+    display:flex;
+  }
+  .sidebar {
+    width:280px; background:var(--surface); border-right:1px solid var(--border);
+    display:flex; flex-direction:column; flex-shrink:0;
+  }
+  .sidebar h3 {
+    font-size:11px; font-weight:700; color:var(--muted); letter-spacing:0.08em;
+    padding:18px 18px 10px; text-transform:uppercase;
+  }
+  .sidebar .comp {
+    display:flex; align-items:center; gap:10px;
+    padding:12px 18px; cursor:pointer; transition:background 0.15s;
+    border-bottom:1px solid rgba(255,255,255,0.03); font-size:13px;
+  }
+  .sidebar .comp:hover { background:rgba(255,255,255,0.03); }
+  .sidebar .comp.active { background:rgba(255,255,255,0.06); border-left:2px solid #7c3aed; }
+  .sidebar .comp .dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+  .sidebar .comp .name { flex:1; }
+  .sidebar .comp .status { font-size:9px; font-weight:700; text-transform:uppercase; padding:2px 8px; border-radius:10px; }
+  .sidebar .footer { margin-top:auto; padding:16px 18px; font-size:9px; color:var(--muted); border-top:1px solid var(--border); }
+  .main { flex:1; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+  .bench-scene {
+    width:400px; height:400px; perspective:800px; position:relative;
+  }
+  .headset {
+    width:260px; height:180px; position:absolute; top:50%; left:50%;
+    transform: translate(-50%,-55%) rotateX(15deg) rotateY(-15deg);
+    transition:transform 0.6s;
+  }
+  .headset:hover { transform:translate(-50%,-55%) rotateX(10deg) rotateY(-25deg); }
+  .visor {
+    width:200px; height:130px; background:linear-gradient(135deg, #2a2040, #1a1530);
+    border-radius:30px; margin:0 auto; position:relative;
+    border:3px solid #888; box-shadow:0 0 40px rgba(124,58,237,0.2), inset 0 0 30px rgba(0,0,0,0.5);
+  }
+  .visor::after {
+    content:''; position:absolute; inset:6px; border-radius:24px;
+    background:linear-gradient(135deg, rgba(255,255,255,0.05), transparent);
+  }
+  .frame {
+    width:220px; height:145px; border:4px solid #999; border-radius:34px;
+    position:absolute; top:-8px; left:-10px;
+    box-shadow:0 0 20px rgba(0,0,0,0.3);
+  }
+  .seal {
+    width:180px; height:100px; background:#1a1a1a; border-radius:24px;
+    position:absolute; top:15px; left:40px; z-index:-1;
+    border:2px solid #333;
+  }
+  .sensor {
+    width:60px; height:16px; background:#777; border-radius:8px;
+    position:absolute; top:-12px; left:90px;
+  }
+  .arm { width:120px; height:12px; background:#555; border-radius:6px; position:absolute; top:60px; }
+  .arm.left { left:-120px; }
+  .arm.right { right:-120px; }
+  .bench { width:350px; height:8px; background:linear-gradient(180deg, #222, #111);
+    border-radius:4px; position:absolute; bottom:60px; left:50%; transform:translateX(-50%);
+    box-shadow:0 4px 20px rgba(0,0,0,0.5);
+  }
+
+  .detail-panel {
+    position:fixed; right:0; top:0; bottom:0; width:300px; background:var(--surface);
+    border-left:1px solid var(--border); padding:24px; transform:translateX(100%);
+    transition:transform 0.3s; z-index:10;
+  }
+  .detail-panel.open { transform:translateX(0); }
+  .detail-panel h2 { font-size:18px; color:#fff; margin-bottom:4px; }
+  .detail-panel .code { font-size:10px; font-family:'SF Mono',monospace; color:var(--muted); margin-bottom:12px; }
+  .detail-panel .desc { font-size:13px; color:var(--muted); line-height:1.6; margin-bottom:16px; }
+  .detail-panel .btn {
+    display:block; width:100%; padding:10px; margin-bottom:6px; border-radius:8px; border:1px solid var(--border);
+    background:var(--card); color:var(--text); cursor:pointer; font-size:12px; text-align:left;
+  }
+  .detail-panel .btn:hover { border-color:#7c3aed; }
+  .detail-panel .close {
+    position:absolute; top:16px; right:16px; background:none; border:none;
+    color:var(--muted); font-size:18px; cursor:pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h3>🔧 Components</h3>
+  <div id="compList"></div>
+  <div class="footer">Apple Internal · VP-0042 · Engineering Sample</div>
+</div>
+
+<div class="main">
+  <div class="bench-scene">
+    <div class="headset">
+      <div class="frame"></div>
+      <div class="visor"></div>
+      <div class="seal"></div>
+      <div class="sensor"></div>
+      <div class="arm left"></div>
+      <div class="arm right"></div>
+    </div>
+    <div class="bench"></div>
+  </div>
+</div>
+
+<div class="detail-panel" id="panel">
+  <button class="close" onclick="closePanel()">✕</button>
+  <h2 id="pName"></h2>
+  <div class="code" id="pCode"></div>
+  <div class="desc" id="pDesc"></div>
+  <button class="btn">▶ Run Diagnostic</button>
+  <button class="btn">📄 View Logs</button>
+  <button class="btn">📦 Order Replacement</button>
+</div>
+
+<script>
+const components = [
+  { id:'display', name:'Micro-OLED Displays', code:'661-12345', status:'nominal', color:'#22c55e',
+    desc:'Dual 4K micro-OLED panels. 23M pixels per eye. 90/96/100Hz. 3,386 PPI. Color uniformity: excellent.' },
+  { id:'sensors', name:'Sensor Array', code:'661-12346', status:'nominal', color:'#22c55e',
+    desc:'12 cameras, 5 sensors, 6 microphones. LiDAR operational. TrueDepth calibrated. All clear.' },
+  { id:'audio', name:'Audio Pods', code:'661-12347', status:'attention', color:'#f59e0b',
+    desc:'Dual-driver spatial audio. Left: nominal. Right: slight 2–4kHz imbalance. Recalibrate advised.' },
+  { id:'thermal', name:'Thermal System', code:'661-12348', status:'nominal', color:'#22c55e',
+    desc:'Dual fan. Range 0°–35°C. Idle: 34°C. Peak: 41°C. Fan curve: auto. No throttling.' },
+  { id:'battery', name:'External Battery', code:'661-12349', status:'warning', color:'#f97316',
+    desc:'35.9Wh Li-Po. 142 cycles. Health: 87%. Runtime: 1h 52m. Replace within 6 months.' },
+  { id:'lightseal', name:'Light Seal', code:'661-12350', status:'nominal', color:'#22c55e',
+    desc:'Size 21W magnetic seal. Foam integrity: excellent. No light bleed. Sanitized.' },
+];
+
+function renderList() {
+  document.getElementById('compList').innerHTML = components.map(c => `
+    <div class="comp" onclick="select('${c.id}')" id="item-${c.id}">
+      <div class="dot" style="background:${c.color}"></div>
+      <span class="name">${c.name}</span>
+      <span class="status" style="color:${c.color};background:${c.color}22">${c.status}</span>
+    </div>
+  `).join('');
+}
+
+let active = null;
+function select(id) {
+  document.querySelectorAll('.comp').forEach(c => c.classList.remove('active'));
+  document.getElementById('item-'+id)?.classList.add('active');
+  const c = components.find(c => c.id === id);
+  if (!c) return;
+  active = c;
+  document.getElementById('pName').textContent = c.name;
+  document.getElementById('pCode').textContent = 'PART ' + c.code;
+  document.getElementById('pDesc').textContent = c.desc;
+  document.getElementById('panel').classList.add('open');
+}
+
+function closePanel() {
+  document.getElementById('panel').classList.remove('open');
+  document.querySelectorAll('.comp').forEach(c => c.classList.remove('active'));
+}
+
+renderList();
+</script>
+</body>
+</html>

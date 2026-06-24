@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solar System — HTML Edition</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#000; overflow:hidden; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; }
+  canvas { display:block; }
+  #info {
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+    color:#888; font-size:11px; pointer-events:none; letter-spacing:0.05em;
+  }
+  #fact {
+    position:fixed; bottom:80px; left:50%; transform:translateX(-50%);
+    background:rgba(0,0,0,0.8); border:1px solid rgba(255,255,255,0.1);
+    border-radius:12px; padding:12px 18px; color:#ccc; font-size:13px;
+    max-width:320px; text-align:center; display:none; backdrop-filter:blur(8px);
+    line-height:1.4;
+  }
+  #fact .name { color:#fff; font-weight:600; font-size:15px; margin-bottom:4px; }
+</style>
+</head>
+<body>
+<div id="fact"><div class="name" id="factName"></div><div id="factText"></div></div>
+<div id="info">🖱️ Drag to rotate · Scroll to zoom · Tap a planet</div>
+
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/" } }
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+// ── Scene ──
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(40, innerWidth/innerHeight, 0.1, 50);
+camera.position.set(0, 2.5, 5);
+const renderer = new THREE.WebGLRenderer({ antialias:true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+document.body.appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; controls.dampingFactor = 0.08;
+controls.minDistance = 2; controls.maxDistance = 12;
+controls.autoRotate = true; controls.autoRotateSpeed = 0.4;
+
+// ── Stars ──
+const starsGeo = new THREE.BufferGeometry();
+const starsPos = new Float32Array(3000*3);
+for(let i=0;i<3000*3;i+=3){ starsPos[i]=(Math.random()-0.5)*20; starsPos[i+1]=(Math.random()-0.5)*14; starsPos[i+2]=(Math.random()-0.5)*12; }
+starsGeo.setAttribute('position', new THREE.BufferAttribute(starsPos,3));
+scene.add(new THREE.Points(starsGeo, new THREE.PointsMaterial({color:0x8888cc,size:0.02})));
+
+// ── Lights ──
+scene.add(new THREE.AmbientLight(0x111133, 0.4));
+const sunLight = new THREE.PointLight(0xfff8e7, 80, 10);
+scene.add(sunLight);
+
+// ── Sun ──
+const sunGeo = new THREE.SphereGeometry(0.25, 48, 48);
+const sunMat = new THREE.MeshStandardMaterial({ color:0xffdd44, emissive:0xffaa00, emissiveIntensity:2, roughness:0.3 });
+const sun = new THREE.Mesh(sunGeo, sunMat);
+sun.name = 'sun';
+scene.add(sun);
+
+// Glow
+const glowGeo = new THREE.SphereGeometry(0.32, 32, 32);
+const glowMat = new THREE.MeshBasicMaterial({ color:0xffaa00, transparent:true, opacity:0.12 });
+scene.add(new THREE.Mesh(glowGeo, glowMat));
+
+// ── Planets ──
+const planetData = [
+  { name:'Mercury', color:0xaaaaaa, size:0.06, orbit:0.7, speed:4.0, fact:'Smallest planet. A year is just 88 days!' },
+  { name:'Venus',   color:0xffaa44, size:0.09, orbit:1.0, speed:3.0, fact:'Hottest planet — 465°C! Spins backwards.' },
+  { name:'Earth',   color:0x4488ff, size:0.10, orbit:1.35,speed:2.5, fact:'Your home. Only planet known to have pizza.' },
+  { name:'Mars',    color:0xff4422, size:0.08, orbit:1.7, speed:2.0, fact:'The Red Planet. Home to Olympus Mons.' },
+  { name:'Jupiter', color:0xcc9966, size:0.22, orbit:2.3, speed:1.2, fact:'Biggest planet — 1,300 Earths fit inside!' },
+  { name:'Saturn',  color:0xddcc88, size:0.18, orbit:2.9, speed:0.9, fact:'Beautiful rings of ice and rock.', rings:true },
+  { name:'Uranus',  color:0x66ccdd, size:0.14, orbit:3.5, speed:0.7, fact:'Rolls on its side like a barrel!' },
+  { name:'Neptune', color:0x5566dd, size:0.13, orbit:4.0, speed:0.5, fact:'Windiest planet — 2,100 km/h storms!' },
+];
+
+const planets = planetData.map(d => {
+  const g = new THREE.SphereGeometry(d.size, 32, 32);
+  const m = new THREE.MeshStandardMaterial({ color:d.color, roughness:0.7 });
+  const mesh = new THREE.Mesh(g, m);
+  mesh.name = d.name.toLowerCase();
+  mesh.userData = { ...d, angle: Math.random()*Math.PI*2 };
+
+  const pivot = new THREE.Object3D();
+  pivot.add(mesh);
+  mesh.position.x = d.orbit;
+  scene.add(pivot);
+
+  if (d.rings) {
+    const rGeo = new THREE.TorusGeometry(d.size*1.6, d.size*0.25, 16, 64);
+    const rMat = new THREE.MeshStandardMaterial({ color:d.color, roughness:0.4, transparent:true, opacity:0.5 });
+    const ring = new THREE.Mesh(rGeo, rMat);
+    ring.rotation.x = Math.PI/2 + 0.4;
+    mesh.add(ring);
+  }
+
+  return { pivot, mesh, data:d };
+});
+
+// ── Raycaster for clicks ──
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+const factBox = document.getElementById('fact');
+const factName = document.getElementById('factName');
+const factText = document.getElementById('factText');
+let shown = false;
+
+renderer.domElement.addEventListener('click', e => {
+  mouse.x = (e.clientX/innerWidth)*2 - 1;
+  mouse.y = -(e.clientY/innerHeight)*2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+  const targets = [sun, ...planets.map(p=>p.mesh)];
+  const hits = raycaster.intersectObjects(targets, true);
+  if (hits.length > 0) {
+    let obj = hits[0].object;
+    while (obj && !obj.userData.fact && obj.name !== 'sun') obj = obj.parent;
+    if (obj) {
+      factName.textContent = obj.name === 'sun' ? 'The Sun' : (obj.userData.name || obj.name);
+      factText.textContent = obj.name === 'sun' ? '4.6 billion years old. Surface: 5,500°C.' : (obj.userData.fact || '');
+      factBox.style.display = 'block';
+      shown = true;
+      setTimeout(() => { factBox.style.display = 'none'; shown = false; }, 4000);
+    }
+  }
+});
+
+// ── Animate ──
+function animate() {
+  requestAnimationFrame(animate);
+  const t = Date.now() * 0.001;
+  planets.forEach(p => {
+    p.pivot.rotation.y = t * p.data.speed * 0.3;
+    p.mesh.rotation.y += 0.01;
+  });
+  sun.rotation.y += 0.003;
+  controls.update();
+  renderer.render(scene, camera);
+}
+animate();
+window.addEventListener('resize', () => {
+  camera.aspect = innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+</script>
+</body>
+</html>

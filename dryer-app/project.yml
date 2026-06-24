@@ -1,0 +1,22 @@
+name: Dryer
+options:
+  bundleIdPrefix: com.dryer
+  deploymentTarget:
+    macOS: "14.0"
+
+targets:
+  Dryer:
+    type: application
+    platform: macOS
+    sources: Sources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dryer.app
+        SWIFT_VERSION: "5.9"
+    info:
+      path: Sources/Info.plist
+      properties:
+        CFBundleName: Dryer
+        CFBundleDisplayName: Dryer
+        CFBundleVersion: "1"
+        CFBundleShortVersionString: "1.0"

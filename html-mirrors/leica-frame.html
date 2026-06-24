@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leica Frame Lines — HTML Edition</title>
+<style>
+  :root {
+    --bg:#0a0a0f; --text:#c8ccd4; --muted:#6b6e7b; --red:#e53935;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    background:var(--bg); color:var(--text); min-height:100vh;
+    display:flex; flex-direction:column; align-items:center;
+  }
+  h1 { font-size:1.2rem; font-weight:600; color:#f0f0f5; margin:24px 0 4px; }
+  .sub { color:var(--muted); font-size:0.78rem; margin-bottom:16px; }
+
+  .frame-selector { display:flex; gap:4px; margin-bottom:20px; }
+  .frame-selector button {
+    padding:6px 18px; border-radius:6px; border:1px solid #333;
+    background:transparent; color:var(--muted); cursor:pointer;
+    font-family:'SF Mono',monospace; font-size:11px; transition:all 0.15s;
+  }
+  .frame-selector button.active { border-color:var(--red); color:var(--red); background:rgba(229,57,53,0.08); }
+
+  .viewfinder {
+    position:relative; width:min(700px, 90vw); aspect-ratio:3/2;
+    background:#111; border:1px solid #222; border-radius:4px;
+    overflow:hidden; box-shadow:0 8px 40px rgba(0,0,0,0.5);
+  }
+  .viewfinder img {
+    width:100%; height:100%; object-fit:cover; display:block;
+  }
+
+  /* Frame lines */
+  .framelines {
+    position:absolute; inset:0; pointer-events:none;
+  }
+  .frame-box {
+    position:absolute; border:1px solid rgba(255,255,255,0.5);
+    transition:all 0.3s;
+  }
+  .frame-box .corner {
+    position:absolute; width:16px; height:16px;
+    border-color:rgba(255,255,255,0.7); border-style:solid;
+  }
+  .corner.tl { top:-1px; left:-1px; border-width:2px 0 0 2px; }
+  .corner.tr { top:-1px; right:-1px; border-width:2px 2px 0 0; }
+  .corner.bl { bottom:-1px; left:-1px; border-width:0 0 2px 2px; }
+  .corner.br { bottom:-1px; right:-1px; border-width:0 2px 2px 0; }
+
+  .info-bar {
+    position:absolute; bottom:0; left:0; right:0; height:28px;
+    display:flex; align-items:center; justify-content:center;
+    gap:20px; font-size:10px; font-family:'SF Mono',monospace;
+    color:rgba(255,255,255,0.4); background:rgba(0,0,0,0.5);
+  }
+  .info-bar .red { color:var(--red); }
+
+  .controls {
+    display:flex; gap:16px; margin-top:20px; align-items:center;
+  }
+  .controls input[type="range"] { width:120px; accent-color:var(--red); }
+  .controls label { font-size:11px; color:var(--muted); }
+
+  .upload {
+    margin-top:20px; padding:10px 24px; border:1px dashed #333;
+    border-radius:8px; cursor:pointer; color:var(--muted); font-size:12px;
+    transition:all 0.15s;
+  }
+  .upload:hover { border-color:var(--red); color:var(--red); }
+  .upload input { display:none; }
+
+  footer { margin:32px 0; color:#2a2a2a; font-size:0.7rem; }
+</style>
+</head>
+<body>
+
+<h1>🔴 Leica Frame Lines</h1>
+<p class="sub">Select a focal length to preview the rangefinder frame lines</p>
+
+<div class="frame-selector">
+  <button data-fl="35" class="active">35mm</button>
+  <button data-fl="50">50mm</button>
+  <button data-fl="90">90mm</button>
+</div>
+
+<div class="viewfinder" id="viewfinder">
+  <img id="photo" src="" alt="Drop a photo here" style="display:none">
+  <div class="framelines" id="framelines">
+    <div class="frame-box" id="frameBox">
+      <div class="corner tl"></div><div class="corner tr"></div>
+      <div class="corner bl"></div><div class="corner br"></div>
+    </div>
+  </div>
+  <div class="info-bar">
+    <span>LEICA M</span><span class="red" id="flDisplay">35mm</span><span>RANGEFINDER</span>
+  </div>
+</div>
+
+<div class="controls">
+  <label>Brightness</label>
+  <input type="range" id="brightness" min="0.5" max="1.5" step="0.1" value="1" oninput="updateBrightness()">
+  <label style="margin-left:12px;">Frame opacity</label>
+  <input type="range" id="opacity" min="0.2" max="1" step="0.1" value="0.6" oninput="updateOpacity()">
+</div>
+
+<label class="upload">
+  📷 Upload a Photo
+  <input type="file" accept="image/*" onchange="loadPhoto(event)">
+</label>
+
+<footer>LeicaCam · HTML Edition</footer>
+
+<script>
+const scales = { '35': 1, '50': 0.85, '90': 0.65 };
+let currentFL = '35';
+
+document.querySelectorAll('.frame-selector button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.frame-selector button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFL = btn.dataset.fl;
+    updateFrame();
+    document.getElementById('flDisplay').textContent = currentFL + 'mm';
+  });
+});
+
+function updateFrame() {
+  const s = scales[currentFL];
+  const vf = document.getElementById('viewfinder');
+  const box = document.getElementById('frameBox');
+  const w = vf.clientWidth * s;
+  const h = w / 1.5;
+  const left = (vf.clientWidth - w) / 2;
+  const top = (vf.clientHeight - h) / 2;
+  box.style.left = left + 'px';
+  box.style.top = top + 'px';
+  box.style.width = w + 'px';
+  box.style.height = h + 'px';
+}
+
+function updateOpacity() {
+  document.getElementById('framelines').style.opacity = document.getElementById('opacity').value;
+}
+
+function updateBrightness() {
+  document.getElementById('photo').style.filter = `brightness(${document.getElementById('brightness').value})`;
+}
+
+function loadPhoto(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = document.getElementById('photo');
+    img.src = ev.target.result;
+    img.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+updateFrame();
+window.addEventListener('resize', updateFrame);
+</script>
+</body>
+</html>
