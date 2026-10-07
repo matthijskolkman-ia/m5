@@ -78,7 +78,7 @@ struct PageListSidebar: View {
 
             Spacer()
 
-            Text("NotionLite · macOS")
+            Text("Kakatu · macOS")
                 .font(.system(size: 8, design: .monospaced))
                 .foregroundColor(.white.opacity(0.15)).padding(.bottom, 10)
         }

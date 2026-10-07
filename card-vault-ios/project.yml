@@ -1,0 +1,31 @@
+name: CardVaultIOS
+options:
+  bundleIdPrefix: com.thijs.cardvaultios
+  deploymentTarget:
+    iOS: "18.0"
+
+targets:
+  CardVaultIOS:
+    type: application
+    platform: iOS
+    sources: Sources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.thijs.cardvault.ios
+        SWIFT_VERSION: "5.9"
+        DEVELOPMENT_TEAM: 69AYY329Y5
+        CODE_SIGN_STYLE: Automatic
+    info:
+      path: Sources/Info.plist
+      properties:
+        CFBundleName: CardVault
+        CFBundleDisplayName: CardVault
+        CFBundleVersion: "1"
+        CFBundleShortVersionString: "1.0"
+        NSCameraUsageDescription: "Take photos of Pokémon cards to add to your CardVault collection."
+        NSLocalNetworkUsageDescription: "CardVault connects to your Mac over WiFi to transfer scanned cards."
+        NSBluetoothAlwaysUsageDescription: "CardVault uses Bluetooth to measure how close your Mac is."
+        NSBonjourServices: ["_cardvault-xfer._tcp"]
+        UILaunchScreen: {}
+        UIRequiredDeviceCapabilities: ["arm64"]
+        UISupportedInterfaceOrientations: ["UIInterfaceOrientationPortrait"]

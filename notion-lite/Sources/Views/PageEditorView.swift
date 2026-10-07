@@ -150,12 +150,15 @@ struct BlockRow: View {
                         .padding(.leading, 10)
                 }
             } else {
-                TextField(placeholderFor(block.type), text: $block.content, axis: .vertical)
+                TextEditor(text: $block.content)
                     .focused($focusedBlockID, equals: block.id)
-                    .textFieldStyle(.plain)
                     .font(fontFor(block.type))
                     .foregroundColor(textColor)
                     .strikethrough(block.type == .todo && block.checked)
+                    .scrollContentBackground(.hidden)
+                    .frame(minHeight: fontFor(block.type) == .system(size: 26, weight: .bold) ? 36 :
+                                  fontFor(block.type) == .system(size: 20, weight: .semibold) ? 28 :
+                                  fontFor(block.type) == .system(size: 16, weight: .semibold) ? 24 : 20)
                     .onSubmit { onEnter() }
             }
         }

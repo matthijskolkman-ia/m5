@@ -23,6 +23,7 @@ struct CoinWatchApp: App {
         WindowGroup {
             PriceView()
                 .frame(minWidth: 340, minHeight: 440)
+                .preferredColorScheme(.dark)
         }
         .windowStyle(.hiddenTitleBar)
         .windowResizability(.contentSize)

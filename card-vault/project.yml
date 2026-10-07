@@ -1,0 +1,27 @@
+name: CardVault
+options:
+  bundleIdPrefix: com.thijs.cardvault
+  deploymentTarget:
+    macOS: "14.0"
+
+targets:
+  CardVault:
+    type: application
+    platform: macOS
+    sources: Sources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.thijs.cardvault
+        SWIFT_VERSION: "5.9"
+    info:
+      path: Sources/Info.plist
+      properties:
+        CFBundleName: CardVault
+        CFBundleDisplayName: CardVault
+        CFBundleVersion: "1"
+        CFBundleShortVersionString: "1.0"
+        NSHighResolutionCapable: true
+        NSLocalNetworkUsageDescription: "CardVault uses the local network to receive card scans from your iPhone."
+        NSBluetoothAlwaysUsageDescription: "CardVault uses Bluetooth to measure how close your iPhone is."
+        NSBonjourServices: ["_cardvault-xfer._tcp"]
+        LSMinimumSystemVersion: "14.0"

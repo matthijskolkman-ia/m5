@@ -1,7 +1,7 @@
 #!/bin/zsh
 cd "$(dirname "$0")"
 
-echo "🔨 Building NotionLite..."
+echo "🔨 Building Kakatu..."
 xcodebuild -project NotionLite.xcodeproj \
     -scheme NotionLite \
     -configuration Release \
@@ -12,9 +12,9 @@ xcodebuild -project NotionLite.xcodeproj \
     -quiet 2>&1
 
 if [ $? -eq 0 ]; then
-    cp -R .build/Build/Products/Release/NotionLite.app ~/Desktop/
-    echo "✅ Done — NotionLite.app is on your Desktop"
-    open ~/Desktop/NotionLite.app
+    cp -R .build/Build/Products/Release/NotionLite.app ~/Desktop/Kakatu.app
+    echo "✅ Done — Kakatu.app is on your Desktop"
+    open ~/Desktop/Kakatu.app
 else
     echo "❌ Build failed"
     exit 1

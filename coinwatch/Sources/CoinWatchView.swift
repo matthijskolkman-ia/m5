@@ -38,8 +38,13 @@ class CoinService: ObservableObject {
         guard let url = URL(string: "https://api.coingecko.com/api/v3/simple/price?ids=\(ids)&vs_currencies=\(currency)&include_24hr_change=true&include_24hr_vol=true&include_market_cap=true") else { return }
 
         URLSession.shared.dataTask(with: url) { [weak self] data, _, err in
-            guard let self, let data = data, let json = try? JSONSerialization.jsonObject(with: data) as? [String: [String: Double]] else {
-                DispatchQueue.main.async { self?.isLoading = false }
+            guard let self else { return }
+            if let err {
+                DispatchQueue.main.async { self.error = err.localizedDescription; self.isLoading = false }
+                return
+            }
+            guard let data = data, let json = try? JSONSerialization.jsonObject(with: data) as? [String: [String: Double]] else {
+                DispatchQueue.main.async { self.error = "API error or rate limit. Try again shortly."; self.isLoading = false }
                 return
             }
             var updated: [Coin] = []
@@ -170,11 +175,21 @@ struct PriceView: View {
             Divider().background(Color.white.opacity(0.06))
 
             // Price list
-            ScrollView {
-                LazyVStack(spacing: 0) {
-                    ForEach(service.coins) { coin in
-                        CoinRow(coin: coin)
-                        Divider().background(Color.white.opacity(0.03))
+            if let error = service.error {
+                VStack(spacing: 8) {
+                    Image(systemName: "wifi.slash").font(.title2).foregroundColor(.secondary)
+                    Text(error).font(.caption).foregroundColor(.secondary).multilineTextAlignment(.center)
+                    Button("Retry") { service.fetch() }.buttonStyle(.bordered).tint(.orange)
+                }.padding(40)
+            } else if service.coins.isEmpty && !service.isLoading {
+                Text("No data").font(.caption).foregroundColor(.secondary).padding(40)
+            } else {
+                ScrollView {
+                    LazyVStack(spacing: 0) {
+                        ForEach(service.coins) { coin in
+                            CoinRow(coin: coin)
+                            Divider().background(Color.white.opacity(0.03))
+                        }
                     }
                 }
             }

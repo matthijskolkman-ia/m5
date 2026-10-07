@@ -8,9 +8,9 @@ final class Database {
         let dir = FileManager.default
             .urls(for: .applicationSupportDirectory, in: .userDomainMask)
             .first!
-            .appendingPathComponent("NotionLite")
+            .appendingPathComponent("Kakatu")
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-        let url = dir.appendingPathComponent("notionlite.sqlite3")
+        let url = dir.appendingPathComponent("kakatu.sqlite3")
         if sqlite3_open(url.path, &db) != SQLITE_OK {
             print("⚠️ NotionLite: failed to open database")
         }

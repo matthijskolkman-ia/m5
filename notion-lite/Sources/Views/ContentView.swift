@@ -1,6 +1,6 @@
 import SwiftUI
 
-// MARK: - Page Store
+// MARK: - Kakatu Page Store
 
 final class PageStore: ObservableObject {
     @Published var pages: [Page] = []
